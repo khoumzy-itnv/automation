@@ -1,0 +1,29 @@
+{
+  "name": "automation",
+  "version": "1.0.0",
+  "description": "automate some boring stuff",
+  "main": "index.js",
+  "bin": {
+    "itnv": "./bin/itnv.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agape-mou/automation.git"
+  },
+  "keywords": [
+    "automation",
+    "cli",
+    "itnv",
+    "deploy",
+    "jira"
+  ],
+  "author": "agape-mou",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/agape-mou/automation/issues"
+  },
+  "homepage": "https://github.com/agape-mou/automation#readme"
+}
