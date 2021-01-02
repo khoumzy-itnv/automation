@@ -25,5 +25,13 @@
   "bugs": {
     "url": "https://github.com/agape-mou/automation/issues"
   },
-  "homepage": "https://github.com/agape-mou/automation#readme"
+  "homepage": "https://github.com/agape-mou/automation#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "chalk": "^4.1.0",
+    "commander": "^6.2.1",
+    "configstore": "^5.0.1",
+    "inquirer": "^7.3.3",
+    "keytar": "^7.3.0"
+  }
 }

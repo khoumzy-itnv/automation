@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+const pkg = require('../package.json');
+const { program } = require('commander');
 
-// make this file executable 😅
-console.log('Hello itnv cli project 🧘🏾‍♂️');
+program.version(pkg.version).command('configure', 'configure Jira credentials').parse(process.argv);
