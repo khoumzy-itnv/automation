@@ -6,7 +6,7 @@ program.version(pkg.version);
 
 program
   .command('consumer')
-  .description('Add Jira account email and API-Token')
+  .description('Add Jira account with email and API-Token')
   .action(async () => await configure());
 
 program.parse(process.argv);
