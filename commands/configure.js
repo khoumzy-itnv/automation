@@ -5,56 +5,93 @@ const Services = require('../lib/service');
 const CredentialManager = require('../lib/credential-manager');
 const chalk = require('chalk');
 
-const jiraConfigure = {
-  async configure() {
-    const credentials = new CredentialManager(`itnv-${pkg.name}`);
+let iterator;
 
-    let { email, token } = await inquirer.prompt([
-      { type: 'input', name: 'email', message: 'What is your Jira email ?', validate: utils.isEmailValid },
-      { type: 'password', name: 'token', message: 'What is your Jira API-Token ?', validate: utils.isEmpty },
-    ]);
+// It's more convenient to use a generator because we have a sequence of task to handle
+function* configureConsumerActions() {
+  try {
+    const user = yield getUser();
+    const { email, token } = user;
+    const project = yield configureDefaultProject(email, token);
+    const boardId = yield configureDefaultBoard(email, token, project.id);
+    yield saveDefaultConfigurations(user, project, boardId);
+  } catch (error) {
+    console.log(chalk.red(error));
+  }
+}
 
-    try {
-      const { data: user } = await Services.getCurrentUser(email, token);
+const getUser = async () => {
+  let { email, token } = await inquirer.prompt([
+    { type: 'input', name: 'email', message: 'What is your Jira email ?', validate: utils.isEmailValid },
+    { type: 'password', name: 'token', message: 'What is your Jira API-Token ?', validate: utils.isEmpty },
+  ]);
 
-      const { data } = await Services.getAllProject(email, token);
+  try {
+    const { data: user } = await Services.getCurrentUser(email, token);
 
-      const projects = data.values;
-
-      let { projectName } = await inquirer.prompt([
-        {
-          type: 'list',
-          name: 'projectName',
-          message: 'What project are you working on?',
-          choices: projects.map((pr) => pr.name),
-        },
-      ]);
-
-      const project = projects.find((pr) => pr.name === projectName);
-
-      const { data: boards } = await Services.getAllBoard(email, token);
-
-      const board = boards.values
-        .filter((b) => b.type === 'scrum' && b.location.projectId.toString() === project.id)
-        .shift();
-
-      const userConfig = {
-        accountId: user.accountId,
-        name: user.name,
-        projectId: project.id,
-        projectKey: project.key,
-        projetName: project.name,
-        boardId: board.id,
-      };
-
-      await credentials.set(email, token, userConfig);
-
-      console.log(chalk.green('Account succesfully configured. Bravo !!!'));
-    } catch (error) {
-      console.log(error);
-      console.log(chalk.red('An expected error occurs. Check your email and API-token and try again.'));
-    }
-  },
+    iterator.next({ ...user, email, token });
+  } catch (error) {
+    iterator.throw('Unable to connect with Jira. Check your email and API-token and try again.');
+  }
 };
 
-module.exports = jiraConfigure;
+const configureDefaultProject = async (email, token) => {
+  try {
+    const { data } = await Services.getAllProject(email, token);
+    const projects = data.values;
+
+    let { projectName } = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'projectName',
+        message: 'What project are you working on?',
+        choices: projects.map((pr) => pr.name),
+      },
+    ]);
+
+    const project = projects.find((pr) => pr.name === projectName);
+
+    iterator.next(project);
+  } catch (error) {
+    iterator.throw('An unexpected error occurs when configuring the default project. Try later.');
+  }
+};
+
+const configureDefaultBoard = async (email, token, projectId) => {
+  try {
+    const { data: boards } = await Services.getAllBoard(email, token);
+
+    const board = boards.values
+      .filter((b) => b.type === 'scrum' && b.location.projectId.toString() === projectId)
+      .shift();
+
+    iterator.next(board.id);
+  } catch (error) {
+    iterator.throw('An unexpected error occurs. Try later.');
+  }
+};
+
+const saveDefaultConfigurations = async (user, project, boardId) => {
+  const credentials = new CredentialManager(`itnv-${pkg.name}`);
+
+  const config = {
+    accountId: user.accountId,
+    name: user.name,
+    projectId: project.id,
+    projectKey: project.key,
+    projetName: project.name,
+    boardId: boardId,
+  };
+
+  await credentials.set(user.email, user.token, config);
+
+  console.log(chalk.green('\nAccount succesfully configured. Bravo !!!'));
+};
+
+const configure = () => {
+  iterator = configureConsumerActions();
+
+  iterator.next();
+};
+
+module.exports = { configure };
