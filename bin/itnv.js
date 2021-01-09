@@ -5,5 +5,5 @@ const { program } = require('commander');
 program
   .version(pkg.version)
   .command('configure', 'configure Jira credentials')
-  .command('list', 'Jira dashboard')
+  .command('list', 'List jira issues')
   .parse(process.argv);

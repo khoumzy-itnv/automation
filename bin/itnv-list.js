@@ -1,20 +1,33 @@
 const pkg = require('../package.json');
+const chalk = require('chalk');
 const { program } = require('commander');
-const { getBoards, getProjects } = require('../commands/list');
+const { getBoards, getProjects, getListIssues } = require('../commands/list');
 
 program.version(pkg.version);
 
 program
-  .command('board')
-  .description('List all boards')
-  .action(async () => await getBoards());
-
-program
-  .command('project')
-  .description('List all projects')
-  .action(async () => await getProjects());
+  .option('-c, --code-review', 'list issues in CODE REVIEW column')
+  .option('-d, --done', 'list issues in DONE column');
 
 program.parse(process.argv);
+
+const wrapper = async (status) => {
+  const issues = await getListIssues(status);
+
+  for (let issue of issues) {
+    console.log(`> ${chalk.green(issue.key)}\t|\t${chalk.white(issue.summary)}`);
+  }
+  console.log('');
+};
+
+if (program.codeReview) {
+  const status = 'CODE REVIEW';
+  wrapper(status);
+}
+if (program.done) {
+  const status = 'DONE';
+  wrapper(status);
+}
 
 if (!process.argv.slice(2).length) {
   program.outputHelp();
