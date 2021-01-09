@@ -11,7 +11,7 @@ program
 
 program.parse(process.argv);
 
-const wrapper = async (status) => {
+const wrapper = async status => {
   const issues = await getListIssues(status);
 
   for (let issue of issues) {

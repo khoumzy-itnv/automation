@@ -1,9 +1,9 @@
 const inquirer = require('inquirer');
-const pkg = require('../package.json');
 const utils = require('../lib/util');
 const Services = require('../lib/service');
-const CredentialManager = require('../lib/credential-manager');
 const chalk = require('chalk');
+
+const { credential } = utils;
 
 let iterator;
 
@@ -45,11 +45,11 @@ const configureDefaultProject = async (email, token) => {
         type: 'list',
         name: 'projectName',
         message: 'What project are you working on?',
-        choices: projects.map((pr) => pr.name),
+        choices: projects.map(pr => pr.name),
       },
     ]);
 
-    const project = projects.find((pr) => pr.name === projectName);
+    const project = projects.find(pr => pr.name === projectName);
 
     iterator.next(project);
   } catch (error) {
@@ -62,7 +62,7 @@ const configureDefaultBoard = async (email, token, projectId) => {
     const { data: boards } = await Services.getAllBoard(email, token);
 
     const board = boards.values
-      .filter((b) => b.type === 'scrum' && b.location.projectId.toString() === projectId)
+      .filter(b => b.type === 'scrum' && b.location.projectId.toString() === projectId)
       .shift();
 
     iterator.next(board.id);
@@ -72,8 +72,6 @@ const configureDefaultBoard = async (email, token, projectId) => {
 };
 
 const saveDefaultConfigurations = async (user, project, boardId) => {
-  const credentials = new CredentialManager(`itnv-${pkg.name}`);
-
   const config = {
     accountId: user.accountId,
     name: user.name,
@@ -83,7 +81,7 @@ const saveDefaultConfigurations = async (user, project, boardId) => {
     boardId: boardId,
   };
 
-  await credentials.set(user.email, user.token, config);
+  await credential.set(user.email, user.token, config);
 
   console.log(chalk.green('\nAccount succesfully configured. Bravo !!!'));
 };

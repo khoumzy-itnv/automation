@@ -1,10 +1,7 @@
 const chalk = require('chalk');
-const inquirer = require('inquirer');
 const { getAllBoard, getSprintsByBoard, getAllProject, getAllIssues } = require('../lib/service');
-const CredentialManager = require('../lib/credential-manager');
-const pkg = require('../package.json');
+const { credential } = require('../lib/util');
 
-const credential = new CredentialManager(`itnv-${pkg.name}`);
 const list = {
   async getListIssues(status) {
     try {
@@ -17,7 +14,7 @@ const list = {
       do {
         const { data } = await getSprintsByBoard(boardId, start);
 
-        const item = data.values.find((sprint) => sprint.state === 'active');
+        const item = data.values.find(sprint => sprint.state === 'active');
 
         if (item) {
           activeSprint = item;
@@ -43,7 +40,7 @@ const list = {
       const { data } = await getAllBoard();
 
       // we suppose that we work in scrum model
-      const boards = data.values.filter((board) => board.type === 'scrum');
+      const boards = data.values.filter(board => board.type === 'scrum');
 
       const { data: sprints } = await getSprintsByBoard(7);
 
@@ -57,7 +54,7 @@ const list = {
     try {
       const { data } = await getAllProject();
 
-      const projects = data.values.map((project) => project.name);
+      const projects = data.values.map(project => project.name);
 
       for (let name of projects) {
         console.log(`> ${chalk.green(name)}`);
@@ -77,8 +74,8 @@ async function getListIssues(boardId, sprintId, status) {
       const { data } = await getAllIssues(boardId, sprintId, start);
 
       const items = data.issues
-        .filter((issue) => issue.fields.status.name.toUpperCase() === status)
-        .map((issue) => ({
+        .filter(issue => issue.fields.status.name.toUpperCase() === status)
+        .map(issue => ({
           key: issue.key,
           id: issue.id,
           summary: issue.fields.summary,
