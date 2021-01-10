@@ -1,7 +1,7 @@
 const pkg = require('../package.json');
 const chalk = require('chalk');
 const { program } = require('commander');
-const { getBoards, getProjects, getListIssues } = require('../commands/list');
+const { getListIssues } = require('../commands/list');
 
 program.version(pkg.version);
 

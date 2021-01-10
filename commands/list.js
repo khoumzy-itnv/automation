@@ -1,71 +1,41 @@
 const chalk = require('chalk');
-const { getAllBoard, getSprintsByBoard, getAllProject, getAllIssues } = require('../lib/service');
+const { getSprintsByBoard, getAllIssues } = require('../lib/service');
 const { credential } = require('../lib/util');
 
-const list = {
-  async getListIssues(status) {
-    try {
-      // we need the active sprint first.
-      let activeSprint = null;
-      const { boardId } = credential.getUserInfo();
+async function getListIssues(status) {
+  try {
+    // we need the active sprint first.
+    let activeSprint = null;
+    const { boardId } = credential.getUserInfo();
 
-      let [lastPage, start, index] = [false, 0, 1];
+    let [lastPage, start, index] = [false, 0, 1];
 
-      do {
-        const { data } = await getSprintsByBoard(boardId, start);
+    do {
+      const { data } = await getSprintsByBoard(boardId, start);
 
-        const item = data.values.find(sprint => sprint.state === 'active');
+      const item = data.values.find(sprint => sprint.state === 'active');
 
-        if (item) {
-          activeSprint = item;
-          break;
-        }
-
-        const { isLast, maxResults } = data;
-        [lastPage, start] = [isLast, index * maxResults];
-        index += 1;
-      } while (!lastPage);
-
-      if (!activeSprint) {
-        console.log(chalk('An unexcepted error occurs. Try later.'));
+      if (item) {
+        activeSprint = item;
+        break;
       }
 
-      return await getListIssues(boardId, activeSprint.id, status);
-    } catch (error) {
-      console.log(error);
+      const { isLast, maxResults } = data;
+      [lastPage, start] = [isLast, index * maxResults];
+      index += 1;
+    } while (!lastPage);
+
+    if (!activeSprint) {
+      console.log(chalk('An unexcepted error occurs. Try later.'));
     }
-  },
-  async getBoards() {
-    try {
-      const { data } = await getAllBoard();
 
-      // we suppose that we work in scrum model
-      const boards = data.values.filter(board => board.type === 'scrum');
+    return await getIssuesByBoardIdAndSprintId(boardId, activeSprint.id, status);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-      const { data: sprints } = await getSprintsByBoard(7);
-
-      console.log(boards);
-    } catch (error) {
-      console.log(error);
-    }
-  },
-
-  async getProjects() {
-    try {
-      const { data } = await getAllProject();
-
-      const projects = data.values.map(project => project.name);
-
-      for (let name of projects) {
-        console.log(`> ${chalk.green(name)}`);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  },
-};
-
-async function getListIssues(boardId, sprintId, status) {
+async function getIssuesByBoardIdAndSprintId(boardId, sprintId, status) {
   try {
     let issues = [];
     let [lastPage, start, index] = [false, 0, 1];
@@ -94,4 +64,4 @@ async function getListIssues(boardId, sprintId, status) {
   }
 }
 
-module.exports = list;
+module.exports = { getListIssues };
