@@ -12,7 +12,7 @@ program
 program.parse(process.argv);
 
 const wrapper = async status => {
-  const issues = await getListIssues(status);
+  const { issues } = await getListIssues(status);
 
   for (let issue of issues) {
     console.log(`> ${chalk.green(issue.key)}\t|\t${chalk.white(issue.summary)}`);

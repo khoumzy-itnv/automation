@@ -2,6 +2,7 @@ const inquirer = require('inquirer');
 const utils = require('../lib/util');
 const Services = require('../lib/service');
 const chalk = require('chalk');
+const monk = require('monk');
 
 const { credential } = utils;
 
@@ -72,6 +73,7 @@ const configureDefaultBoard = async (email, token, projectId) => {
 };
 
 const saveDefaultConfigurations = async (user, project, boardId) => {
+  const data = Services.getProjectConfig();
   const config = {
     accountId: user.accountId,
     name: user.name,
@@ -79,6 +81,7 @@ const saveDefaultConfigurations = async (user, project, boardId) => {
     projectKey: project.key,
     projetName: project.name,
     boardId: boardId,
+    projectConfig: data,
   };
 
   await credential.set(user.email, user.token, config);

@@ -29,13 +29,13 @@ async function getListIssues(status) {
       console.log(chalk('An unexcepted error occurs. Try later.'));
     }
 
-    return await getIssuesByBoardIdAndSprintId(boardId, activeSprint.id, status);
+    return await getIssuesByBoardIdAndSprintId(boardId, activeSprint.id, status, activeSprint.name);
   } catch (error) {
     console.log(error);
   }
 }
 
-async function getIssuesByBoardIdAndSprintId(boardId, sprintId, status) {
+async function getIssuesByBoardIdAndSprintId(boardId, sprintId, status, sprintName) {
   try {
     let issues = [];
     let [lastPage, start, index] = [false, 0, 1];
@@ -58,7 +58,7 @@ async function getIssuesByBoardIdAndSprintId(boardId, sprintId, status) {
       index += 1;
     } while (!lastPage);
 
-    return issues;
+    return { sprint: sprintName, issues };
   } catch (error) {
     console.log(error);
   }

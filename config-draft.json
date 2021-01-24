@@ -1,0 +1,31 @@
+{
+   "name":"Landfiles",
+   "key": "LAND",
+   "teams":[
+      {
+         "email":"mohamet-abdallah.khouma@itnewvision.com",
+         "status":"TECHNICAL"
+      },
+      {
+         "email":"ismail.zahid@itnewvision.com",
+         "status":"TECHNICAL"
+      },
+      {
+         "email":"ahmed.eddaoudi@itnewvision.com",
+         "status":"TECHNICAL"
+      },
+      {
+         "email":"youssef.kamil@itnewvision.com",
+         "status":"FUNCTIONAL"
+      },
+      {
+         "email":"nicolas.minary@itnewvision.com",
+         "status":"FUNCTIONAL"
+      },
+      {
+         "email":"chemaa.lechgar@itnewvision.com",
+         "status":"FUNCTIONAL"
+      }
+   ],
+   "environments": { "test": "acceptance", "prod": "production"}
+}

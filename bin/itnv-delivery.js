@@ -12,7 +12,8 @@ program
 program
   .command('prod')
   .description('Deploy in prod environment')
-  .action(async () => await delivery('DONE'));
+  .option('-r, --release', 'Deploy all tickets in one release')
+  .action(async options => await delivery('DONE', options.release));
 
 program.parse(process.argv);
 
