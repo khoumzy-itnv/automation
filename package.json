@@ -1,13 +1,15 @@
 {
-  "name": "automation",
-  "version": "1.0.0",
-  "description": "automate some boring stuff",
-  "main": "index.js",
+  "name": "@agape/automation",
+  "version": "1.0.1",
+  "description": "automate some deployement stuff",
   "bin": {
     "itnv": "./bin/itnv.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "repository": {
     "type": "git",
