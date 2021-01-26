@@ -6,13 +6,13 @@ program.version(pkg.version);
 
 program
   .command('test')
-  .description('Deploy in test environment')
+  .description('Deliver in test environment')
   .action(async () => await delivery('CODE REVIEW'));
 
 program
   .command('prod')
-  .description('Deploy in prod environment')
-  .option('-r, --release', 'Deploy all tickets in one release')
+  .description('Deliver in prod environment')
+  .option('-r, --release', 'Deliver all tickets in one release')
   .action(async options => await delivery('DONE', options.release));
 
 program.parse(process.argv);

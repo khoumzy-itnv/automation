@@ -25,7 +25,7 @@ const delivery = async (status, isRelease) => {
     mailConfiguration = {
       to: config.teams.filter(team => team.status === 'FUNCTIONAL').map(team => team.email),
       cc: config.teams.filter(team => team.status === 'TECHNICAL').map(team => team.email),
-      subject: `Livraison ${config.environment.test} : Sprint ${sprint}`,
+      subject: `Livraison ${config.environment.test} : ${sprint}`,
       environment: config.environment.test,
       tickets: selected,
       isVersion: false,
