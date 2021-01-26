@@ -1,6 +1,6 @@
 {
   "name": "@agape/automation",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "automate some deployment stuff",
   "bin": {
     "itnv": "./bin/itnv.js"
