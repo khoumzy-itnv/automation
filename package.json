@@ -1,5 +1,5 @@
 {
-  "name": "@agape/automation",
+  "name": "@agape-mou/automation",
   "version": "1.0.4",
   "description": "automate some deployment stuff",
   "bin": {
