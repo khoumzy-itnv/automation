@@ -1,6 +1,9 @@
 #! /usr/bin/env node
 const pkg = require('../package.json');
 const { program } = require('commander');
+const updateNotifier = require('update-notifier');
+
+updateNotifier({ pkg }).notify({ isGlobal: true });
 
 program
   .version(pkg.version)
