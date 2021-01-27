@@ -17,6 +17,7 @@ Other teams can use it but we assume they are using agile method 🤪
 - Configure env variables
 
 `JIRA_BASE_URL=https://rmsys.atlassian.net`
+
 `MONGO_URI_ITNV='mongodb+srv://itnv-delivery:QGSTfRe17mZZMV9y@delivery.epdfx.mongodb.net/delivery?retryWrites=true&w=majority'`
 
 ## 🔐 Commands
@@ -35,12 +36,12 @@ Commands:
   help [command]  display help for command
 ```
 
-2. ### `itnv configure consumer`
+2.  #### `itnv configure consumer`
 
 This command allows the user to connect this application to its Jira account.
 Email address and API-Token are required. Follow this [link](https://confluence.atlassian.com/cloud/api-tokens-938839638.html) to get API-Token
 
-3. ### `itnv list -h`
+3. #### `itnv list -h`
 
 ```
 Options:
@@ -50,7 +51,7 @@ Options:
   -h, --help         display help for command
 ```
 
-4. ### `itnv delivery -h`
+4. #### `itnv delivery -h`
 
 To deliver in prod environment we have two options : either deploy all tickets inside a release or deliver tickets in done column.
 
